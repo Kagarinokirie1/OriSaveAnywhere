@@ -1,0 +1,15 @@
+<Project>
+
+  <!--
+    构建需要游戏目录下由 BepInEx 生成的 interop 程序集（BepInEx/core、BepInEx/interop）。
+    把 GameDir 改成你自己的游戏根目录即可；也可以不改文件，改用环境变量 ORIWOTW_DIR 覆盖：
+
+        $env:ORIWOTW_DIR = 'D:\steam\steamapps\common\Ori and the Will of the Wisps'
+        dotnet build src/SaveAnywhere/SaveAnywhere.csproj -c Release
+  -->
+  <PropertyGroup>
+    <GameDir Condition="'$(ORIWOTW_DIR)' != ''">$(ORIWOTW_DIR)\</GameDir>
+    <GameDir Condition="'$(GameDir)' == ''">D:\steam\steamapps\common\Ori and the Will of the Wisps\</GameDir>
+  </PropertyGroup>
+
+</Project>

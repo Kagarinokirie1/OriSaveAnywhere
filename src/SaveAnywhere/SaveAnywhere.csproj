@@ -1,0 +1,53 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    随时存档 Mod 工程。
+    依赖 BepInEx 6（IL2CPP）以及游戏运行时生成的 interop 程序集，
+    游戏目录由仓库根目录的 Directory.Build.props 提供（可用环境变量 ORIWOTW_DIR 覆盖）。
+  -->
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <AssemblyName>SaveAnywhere</AssemblyName>
+    <RootNamespace>SaveAnywhere</RootNamespace>
+    <Version>0.2.0</Version>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <DebugType>none</DebugType>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <EnableDefaultCompileItems>true</EnableDefaultCompileItems>
+    <!-- 兜底：没有 Directory.Build.props 时按「工程位于游戏根目录下 src/<ModName>」推断 -->
+    <GameDir Condition="'$(GameDir)' == ''">$(MSBuildThisFileDirectory)..\..\</GameDir>
+    <BepInExCoreDir>$(GameDir)BepInEx\core\</BepInExCoreDir>
+    <BepInExInteropDir>$(GameDir)BepInEx\interop\</BepInExInteropDir>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="BepInEx.Core">
+      <HintPath>$(BepInExCoreDir)BepInEx.Core.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="BepInEx.Unity.IL2CPP">
+      <HintPath>$(BepInExCoreDir)BepInEx.Unity.IL2CPP.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Il2CppInterop.Runtime">
+      <HintPath>$(BepInExCoreDir)Il2CppInterop.Runtime.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="0Harmony">
+      <HintPath>$(BepInExCoreDir)0Harmony.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <!-- 引用 BepInEx 生成的全部 interop 程序集（游戏类型与 UnityEngine 都在这里） -->
+  <ItemGroup>
+    <InteropAssembly Include="$(BepInExInteropDir)*.dll" />
+    <Reference Include="@(InteropAssembly)">
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+</Project>
